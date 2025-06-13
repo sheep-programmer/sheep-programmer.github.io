@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheep Programmer - 博客文章</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        /* 页面标题 */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* 博客统计 */
+        .blog-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        /* 博客文章列表 */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .blog-card:hover .blog-image::before {
+            left: 100%;
+        }
+
+        .blog-content {
+            padding: 2rem;
+        }
+
+        .blog-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .blog-meta i {
+            color: #667eea;
+        }
+
+        .blog-excerpt {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tag {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .blog-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .blog-link:hover {
+            color: #764ba2;
+            transform: translateX(5px);
+        }
+
+        /* 加载动画 */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: white;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 5rem 1rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <i class="fas fa-code"></i> Sheep Programmer
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">返回首页</a></li>
+                <li><a href="https://blog.csdn.net/2402_86948827" target="_blank">CSDN博客</a></li>
+                <li><a href="https://github.com/sheep-programmer" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1><i class="fas fa-blog"></i> 我的博客文章</h1>
+            <p>分享编程经验，记录技术成长</p>
+        </div>
+
+        <!-- 博客统计 -->
+        <div class="blog-stats">
+            <div class="stat-card">
+                <span class="stat-number" id="total-articles">5</span>
+                <div class="stat-label">总文章数</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="total-views">3,222</span>
+                <div class="stat-label">总访问量</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="total-likes">57</span>
+                <div class="stat-label">获得点赞</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="total-collections">13</span>
+                <div class="stat-label">获得收藏</div>
+            </div>
+        </div>
+
+        <!-- 加载提示 -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>正在加载博客文章...</p>
+        </div>
+
+        <!-- 博客文章列表 -->
+        <div class="blog-grid" id="blog-grid" style="display: none;">
+            <!-- 文章将通过JavaScript动态加载 -->
+        </div>
+    </div>
+
+    <script>
+        // 博客文章数据（基于您的CSDN博客内容）
+        const blogArticles = [
+            {
+                title: "Python画仿真分形树",
+                excerpt: "Python的turtle库画带树叶的仿真分形树。使用递归算法实现自然逼真的分形树效果，包含树干、树枝和树叶的绘制。",
+                date: "2024-11-18",
+                views: 402,
+                likes: 7,
+                collections: 0,
+                tags: ["Python", "turtle", "分形", "算法"],
+                url: "https://blog.csdn.net/2402_86948827/article/details/143863375",
+                icon: "fas fa-tree"
+            },
+            {
+                title: "Python代码高度还原：购物小票",
+                excerpt: "使用Python代码高还原度地模拟真实购物小票的格式和样式，包含商品信息、价格计算、税费等完整功能。",
+                date: "2024-11-16",
+                views: 577,
+                likes: 14,
+                collections: 3,
+                tags: ["Python", "模拟", "实用工具"],
+                url: "https://blog.csdn.net/2402_86948827/article/details/143824736",
+                icon: "fas fa-receipt"
+            },
+            {
+                title: "Python画动态升国旗+国歌歌词",
+                excerpt: "使用python的turtle库画升国旗的画面，带上歌词版本。实现动态的国旗升起效果，配合国歌歌词显示。",
+                date: "2024-11-16",
+                views: 465,
+                likes: 10,
+                collections: 3,
+                tags: ["Python", "turtle", "动画", "爱国"],
+                url: "https://blog.csdn.net/2402_86948827/article/details/143824448",
+                icon: "fas fa-flag"
+            },
+            {
+                title: "Python画超准计时器，可暂停",
+                excerpt: "使用turtle画一个误差极小的简易计时器，可以暂停。实现精确的时间控制和用户交互功能。",
+                date: "2024-11-16",
+                views: 445,
+                likes: 11,
+                collections: 0,
+                tags: ["Python", "turtle", "计时器", "交互"],
+                url: "https://blog.csdn.net/2402_86948827/article/details/143808154",
+                icon: "fas fa-stopwatch"
+            },
+            {
+                title: "Python画仿斗地主发牌器",
+                excerpt: "使用Python的turtle库画出斗地主随机发牌的效果。模拟真实的扑克牌发牌过程，包含随机分配和动画效果。",
+                date: "2024-11-15",
+                views: 360,
+                likes: 11,
+                collections: 2,
+                tags: ["Python", "turtle", "游戏", "随机算法"],
+                url: "https://blog.csdn.net/2402_86948827/article/details/143808343",
+                icon: "fas fa-cards"
+            }
+        ];
+
+        // 渲染博客文章
+        function renderBlogArticles() {
+            const blogGrid = document.getElementById('blog-grid');
+            const loading = document.getElementById('loading');
+
+            // 模拟加载延迟
+            setTimeout(() => {
+                loading.style.display = 'none';
+                blogGrid.style.display = 'grid';
+
+                blogGrid.innerHTML = blogArticles.map(article => `
+                    <div class="blog-card">
+                        <div class="blog-image">
+                            <i class="${article.icon}"></i>
+                        </div>
+                        <div class="blog-content">
+                            <h3 class="blog-title">${article.title}</h3>
+                            <div class="blog-meta">
+                                <span><i class="fas fa-calendar"></i> ${article.date}</span>
+                                <span><i class="fas fa-eye"></i> ${article.views}</span>
+                                <span><i class="fas fa-heart"></i> ${article.likes}</span>
+                                <span><i class="fas fa-bookmark"></i> ${article.collections}</span>
+                            </div>
+                            <p class="blog-excerpt">${article.excerpt}</p>
+                            <div class="blog-tags">
+                                ${article.tags.map(tag => `<span class="blog-tag">${tag}</span>`).join('')}
+                            </div>
+                            <a href="${article.url}" target="_blank" class="blog-link">
+                                阅读全文 <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                `).join('');
+
+                // 添加入场动画
+                const cards = document.querySelectorAll('.blog-card');
+                cards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(50px)';
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.6s ease-out';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 200);
+                });
+            }, 1500);
+        }
+
+        // 数字动画效果
+        function animateNumbers() {
+            const numbers = document.querySelectorAll('.stat-number');
+
+            numbers.forEach(number => {
+                const finalValue = number.textContent.replace(/,/g, '');
+                if (!isNaN(finalValue)) {
+                    let current = 0;
+                    const increment = finalValue / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= finalValue) {
+                            number.textContent = finalValue.toLocaleString();
+                            clearInterval(timer);
+                        } else {
+                            number.textContent = Math.floor(current).toLocaleString();
+                        }
+                    }, 30);
+                }
+            });
+        }
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            renderBlogArticles();
+            setTimeout(animateNumbers, 500);
+        });
+    </script>
+</body>
+</html>
